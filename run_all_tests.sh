@@ -80,7 +80,7 @@ for tag in `echo $whitelist`; do
     sudo ./run-trial.py $tag-iter$j
 
     # Generate stats
-    $ROOT_FOLDER/6829-web/stats /tmp/to-upload.gz $tag-iter$j.html
+    $ROOT_FOLDER/6829-web/stats /tmp/to-upload.gz $tag-iter$j-$2.html
     mv $tag-iter$j.html $ROOT_FOLDER/results/
 
     j=`expr $j '+' 1`
