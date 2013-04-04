@@ -7,8 +7,8 @@ ROOT_FOLDER=/home/ubuntu
 #blacklist=`bhbaker-blazarus-ps2 czhao-heyitsye-ps2 hyuen-gelash-ps2 johnnyb-ameesh-ps2 mattocks-badar-kjw-ps2 ravinet-yuhan-ps2 rterbush-ps2 shalev-belinkov-ps2`
 
 # White list of all working submissions
-if [ $# -ne 1 ]; then
-  echo "Enter whitelist"
+if [ $# -ne 2 ]; then
+  echo "Enter whitelist, train/test"
   exit
 fi
 source $1
