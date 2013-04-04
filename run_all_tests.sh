@@ -28,6 +28,12 @@ git checkout -- .
 cd $ROOT_FOLDER
 ./update-git-repos
 
+# copy modified version of cellsim-runner.sh
+if [ $2 -eq "test" ];
+  echo "Picking testing trace, copy cellsim-runner.sh"
+  cp cellsim-runner.sh $ROOT_FOLDER/multisend/sender
+fi;
+
 # clone submissions
 cd $ROOT_FOLDER
 rm -rf $ROOT_FOLDER/results
