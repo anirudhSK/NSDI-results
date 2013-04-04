@@ -29,7 +29,7 @@ cd $ROOT_FOLDER
 ./update-git-repos
 
 # copy modified version of cellsim-runner.sh
-if [ "$2" -eq "test" ]; then
+if [ "$2" == "test" ]; then
   echo "Picking testing trace, copy cellsim-runner.sh"
   cp cellsim-runner.sh $ROOT_FOLDER/multisend/sender
 fi;
