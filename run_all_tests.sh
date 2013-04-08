@@ -26,9 +26,11 @@ cd $ROOT_FOLDER/datagrump
 make clean
 git checkout -- .
 cd $ROOT_FOLDER
+
+# Now update to latest version
 ./update-git-repos
 
-# copy modified version of cellsim-runner.sh
+# copy modified version of cellsim-runner.sh if required
 if [ "$2" == "test" ]; then
   echo "Picking testing trace, copy cellsim-runner.sh"
   cp cellsim-runner.sh $ROOT_FOLDER/multisend/sender
@@ -64,6 +66,7 @@ for tag in `echo $whitelist`; do
   # Make clean and make
   make clean > /dev/null
   make > /dev/null
+  echo "Make result $?"
 
   # Copy to right location
   rm $ROOT_FOLDER/datagrump/datagrump-sender $ROOT_FOLDER/datagrump/datagrump-receiver
@@ -71,7 +74,6 @@ for tag in `echo $whitelist`; do
   cp datagrump-receiver $ROOT_FOLDER/datagrump
 
   # Run 3 iterations
-  echo "Make result $?"
   cd $ROOT_FOLDER/contest
 
   j=0;
@@ -82,6 +84,7 @@ for tag in `echo $whitelist`; do
     # Generate stats
     $ROOT_FOLDER/6829-web/stats /tmp/to-upload.gz $tag-iter$j-$2.html
     mv $tag-iter$j-$2.html $ROOT_FOLDER/results/
+    mv /tmp/to_upload.gz $ROOT_FOLDER/results/$tag-iter$j-$2.gz
 
     j=`expr $j '+' 1`
   done
