@@ -84,7 +84,7 @@ for tag in `echo $whitelist`; do
     # Generate stats
     $ROOT_FOLDER/6829-web/stats /tmp/to-upload.gz $tag-iter$j-$2.html
     mv $tag-iter$j-$2.html $ROOT_FOLDER/results/
-    mv /tmp/to-upload.gz $ROOT_FOLDER/results/$tag-iter$j-$2.gz
+    sudo cp /tmp/to-upload.gz $ROOT_FOLDER/results/$tag-iter$j-$2.gz
 
     j=`expr $j '+' 1`
   done
