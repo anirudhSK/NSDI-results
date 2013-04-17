@@ -25,7 +25,7 @@ my $test = { johnnybameesh => [ 2.53, 161.00, -4.15 ],
 	     cjosephpavpan => [ 3.29, 1193.00, -5.89 ],
 	     thashimpareshmg => [ 0.24, 150.00, -6.43 ],
 	     shalevbelinkov => [ 3.07, 7957.00, -7.86 ],
-	     shalevbelinkov2 => [ 2.98, 221, -4.30 ] };
+	     'revised-shalevbelinkov' => [ 2.98, 221, -4.30 ] };
 
 my $train = { dasjoshma => [ 4.29, 158, -3.60681122 ],
 	      aganeberzak => [ 4.52, 167, -3.61033885 ],
@@ -51,7 +51,7 @@ my $train = { dasjoshma => [ 4.29, 158, -3.60681122 ],
 	      franklikxing => [ 4.18, 216, -3.94381814 ],
 	      czhaoheyitsye => [ 3.90, 154, -3.67514482 ],
 	      shalevbelinkov => [ 4.71, 196, -3.72751143 ],
-	      shalevbelinkov2 => [ 4.71, 196, -3.72751143 ] };
+	      'revised-shalevbelinkov' => [ 4.71, 196, -3.72751143 ] };
 
 my $lozenge = <<'END';
   <defs
@@ -66,7 +66,7 @@ my $lozenge = <<'END';
           d="M 0,0 5,-5 -12.5,0 5,5 0,0 z"
           transform="matrix(-0.8,0,0,-0.8,-10,0)"
           id="path36174"
-          style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt" />
+          style="fill:#FFFFFF;stroke:#FFFFFF;stroke-width:1pt" />
     </marker>
   </defs>
 
@@ -77,17 +77,17 @@ my $lozenge = <<'END';
         d="m 347.93938,61.902275 a 50.289993,31.040236 0 1 1 -100.57999,0 50.289993,31.040236 0 1 1 100.57999,0 z"
         transform="matrix(0.81139419,-0.58449935,0.58449935,0.81139419,10.043374,210.55449)"
         id="path36637"
-        style="fill:#ffd7ff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-opacity:1;display:inline" />
+        style="fill:#004000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-opacity:1;display:inline" />
     <path
         d="m 304.36043,72.312615 15.50374,-12.67902"
         id="path36165"
-        style="fill:none;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#Arrow1Lend);display:inline" />
+        style="fill:#000000;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#Arrow1Lend);display:inline" />
     <text
         x="124.90462"
         y="256.27182"
         transform="matrix(0.76379002,-0.6454648,0.6454648,0.76379002,0,0)"
         id="text270-5"
-        style="font-size:18px;text-anchor:start;color:#000000;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Arial">
+        style="font-size:18px;text-anchor:start;color:#FFFFFF;fill:#FFFFFF;fill-opacity:1;stroke:none;display:inline;font-family:Arial">
       <tspan
           id="tspan36635"
           style="font-style:italic;font-weight:bold;-inkscape-font-specification:Arial Bold Italic">Better</tspan>
@@ -100,24 +100,24 @@ sub makeframe {
 
   open GNUPLOT, q{| gnuplot} or die;
   print GNUPLOT <<END;
-set ylabel "Throughput"
-set xlabel "Delay"
-set xrange [596:138]
-set yrange [0.2:3.5]
+set ylabel "Throughput (Mbps)"
+set xlabel "Delay (ms)"
+set xrange [1600:128]
+set yrange [0.17:3.5]
 set logscale x
-set terminal svg size 1024,768 dashed
+set terminal svg size 960,720 dashed
 set output "/tmp/data.svg"
 unset key
 END
 
-  my @xtics = (138, 256, 512);
+  my @xtics = (128, 256, 512, 1024);
   my @ytics = (0.5, 1, 1.5, 2, 2.5, 3, 3.5);
   print GNUPLOT q{set xtics (};
 
   my @xticstr;
 
   for ( @xtics ) {
-    push @xticstr, sprintf qq{"%.0f" %f}, (1 - $interp) * ($_ * 69 / 51) + $interp * $_, $_;
+    push @xticstr, sprintf qq{"%.0f" %f}, (1 - $interp) * ($_ * 51 / 69) + $interp * $_, $_;
   }
 
   print GNUPLOT join ", ", @xticstr;
@@ -128,32 +128,53 @@ END
   my @yticstr;
 
   for ( @ytics ) {
-    push @yticstr, sprintf qq{"%.1f" %f}, (1 - $interp) * ($_ * 3.41 / 5.07) + $interp * $_, $_;
+    push @yticstr, sprintf qq{"%.1f" %f}, (1 - $interp) * ($_ * 5.07 / 3.41) + $interp * $_, $_;
   }
 
   print GNUPLOT join ", ", @yticstr;
   print GNUPLOT qq{)\n};
 
 
-  printf GNUPLOT qq{set title "Training to testing (%.0f%%)"\n}, $interp * 100;
+  if ( $interp == 0 ) {
+    printf GNUPLOT qq{set title "Performance on training data (Verizon LTE, September, 2012)"\n};
+  } elsif ( $interp == 1 ) {
+    printf GNUPLOT qq{set title "Performance on training data (Verizon LTE, March 2013)"\n};
+  } else {
+    printf GNUPLOT qq{set title "Performance on training (%.0f%%) => testing (%.0f%%) data"\n}, (1 - $interp) * 100, $interp * 100;
+  }
+
+sub myfunc {
+  my ( $newa, $newb ) = @_;
+  if ( $newa =~ m{revised} ) {
+    $newa = "shalevbelinkov2";
+  }
+  if ( $newb =~ m{revised} ) {
+    $newb = "shalevbelinkov2";
+  }
+  return $newa cmp $newb;
+}
 
   my $num = 1;
   my $num_shalev = 0;
-  for ( sort keys $test ) {
+  for ( sort { myfunc( $a, $b ) } keys $test ) {
     my $name = $_;
     my $throughput = (1 - $interp) * ($train->{ $_ }[ 0 ] * 3.41 / 5.07) + $interp * $test->{ $_ }[ 0 ];
     my $delay = (1 - $interp) * ($train->{ $_ }[ 1 ] * 69 / 51) + $interp * $test->{ $_ }[ 1 ];
     my $voffset = 0;
     $voffset = 0.5 if $name =~ m{ameesh};
+    $voffset = 0.5 if $name =~ m{sprout25};
+    $voffset = 0.5 if $name =~ m{leonidg};
 
     if ( $name eq "shalevbelinkov" ) {
       $num_shalev = $num;
-    } elsif ( $name eq "shalevbelinkov2" ) {
+    } elsif ( $name =~ m{revised} ) {
       $num = $num_shalev;
-      $name = "shalevbelinkov";
+#      $name = "shalevbelinkov";
     }
 
-    print GNUPLOT qq{set label "$name" at $delay,$throughput right textcolor ls $num point lc $num pt $num offset -1.5,$voffset\n};
+    my $direction = "right";
+
+    print GNUPLOT qq{set label "$name" at $delay,$throughput $direction textcolor ls $num point lc $num pt $num offset -1.5,$voffset\n};
     $num++;
   }
 
@@ -180,10 +201,11 @@ END
   close SVG or die;
 
   system( qq{inkscape /tmp/data.svg --export-png=frames/out${frameno}.png -y 255} );
+  system( qq{convert -negate frames/out${frameno}.png frames/out-invert${frameno}.png} );
 }
 
 my $num = 0;
 
-for ( 1 .. 60 ) { makeframe( 0, $num++ ) }
+for ( 1 .. 100 ) { makeframe( 0, $num++ ) }
 for ( 0 .. 512 ) { makeframe( .5 * (1 - cos( 3.14159265 * $_ / 512 )), $num++ ) }
-for ( 1 .. 60 ) { makeframe( 1, $num++ ) }
+for ( 1 .. 100 ) { makeframe( 1, $num++ ) }
