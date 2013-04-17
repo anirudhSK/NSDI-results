@@ -105,7 +105,7 @@ set xlabel "Delay (ms)"
 set xrange [1600:128]
 set yrange [0.17:3.5]
 set logscale x
-set terminal svg size 960,720 dashed
+set terminal svg size 1280,720 dashed
 set output "/tmp/data.svg"
 unset key
 END

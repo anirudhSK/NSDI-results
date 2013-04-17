@@ -1,0 +1,37 @@
+#!/usr/bin/perl -w
+
+use strict;
+
+my $data = {};
+
+for my $filename (@ARGV) {
+  my $names = $filename;
+  $names =~ s{(-ps2|-kjw|-fixed|-iter).*}{}g;
+  $names =~ s{-}{}g;
+
+  open FILE, $filename or die;
+  my ( $throughput, $delay, $score );
+  while ( <FILE> ) {
+    if ( m{Delay \(95th percentile\):</td><td> </td><td><b>(\d+) ms} ) {
+      $delay = $1;
+    } elsif ( m{Protocol throughput:</td><td></td><td><b>([\d\.]+) Mbps</b>} ) {
+      $throughput = $1;
+    } elsif ( m{score:</td><td></td><td><strong>([\d\.\-]+)</strong>} ) {
+      $score = $1;
+    }
+  }
+
+  die "$filename" unless ( defined $throughput ) and ( defined $delay ) and ( defined $score );
+
+  if ( not defined $data->{ $names } ) {
+    $data->{ $names } = [ $throughput, $delay, $score ];
+  } elsif ( $data->{ $names }->[ 2 ] < $score ) {
+    $data->{ $names } = [ $throughput, $delay, $score ];
+  }
+  close FILE;
+}
+
+for ( keys $data ) {
+  my $str = join ", ", @{ $data->{ $_ } };
+  print "$_ => [ $str ],\n";
+}
