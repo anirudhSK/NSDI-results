@@ -1,0 +1,189 @@
+#!/usr/bin/perl -w
+
+use strict;
+
+my $test = { johnnybameesh => [ 2.53, 161.00, -4.15 ],
+	     sprout => [ 2.03, 139.00, -4.22 ],
+	     sprout15 => [ 2.73, 202, -4.30 ],
+	     sprout25 => [ 2.98, 285, -4.56 ],
+	     dasjoshma => [ 2.52, 174.00, -4.23 ],
+	     franklikxing => [ 2.32, 184.00, -4.37 ],
+	     alanhozek => [ 1.98, 162.00, -4.40 ],
+	     czhaoheyitsye => [ 2.21, 199.00, -4.50 ],
+	     rterbush => [ 2.27, 222.00, -4.58 ],
+	     chiraagpraynaa => [ 2.46, 244.00, -4.60 ],
+	     hishinadschulz => [ 1.86, 199.00, -4.67 ],
+	     hyuengelash => [ 2.02, 221.00, -4.69 ],
+	     bhbakerblazarus => [ 1.70, 221.00, -4.87 ],
+	     omidacostan => [ 1.65, 226.00, -4.92 ],
+	     lalpertpquimby => [ 2.18, 360.00, -5.11 ],
+	     aganeberzak => [ 2.84, 472.00, -5.11 ],
+	     karthikndiegcif => [ 2.72, 471.00, -5.15 ],
+	     ravinetyuhan => [ 2.66, 462.00, -5.16 ],
+	     mattocksbadar => [ 0.97, 173.00, -5.19 ],
+	     jsterlinleonidg => [ 2.72, 595.00, -5.39 ],
+	     cjosephpavpan => [ 3.29, 1193.00, -5.89 ],
+	     thashimpareshmg => [ 0.24, 150.00, -6.43 ],
+	     shalevbelinkov => [ 3.07, 7957.00, -7.86 ],
+	     shalevbelinkov2 => [ 2.98, 221, -4.30 ] };
+
+my $train = { dasjoshma => [ 4.29, 158, -3.60681122 ],
+	      aganeberzak => [ 4.52, 167, -3.61033885 ],
+	      thashimpareshmg => [ 0.26, 102, -5.95933429 ],
+	      hyuengelash => [ 3.65, 164, -3.80621311 ],
+	      mattocksbadar => [ 1.49, 134, -4.50173906 ],
+	      sprout => [ 3.54, 129, -3.59698478 ],
+	      sprout15 => [ 4.37, 174, -3.68437125 ],
+	      sprout25 => [ 4.98, 205, -3.79705797 ],
+#	      sprout50 => [ 4.79, 274, -4.04614319 ],
+	      lalpertpquimby => [ 3.34, 175, -3.95814938 ],
+	      jsterlinleonidg => [ 4.98, 319, -4.38 ],
+	      hishinadschulz => [ 3.31, 207, -4.13690513 ],
+	      karthikndiegcif => [ 4.41, 234, -3.97072763 ],
+	      ravinetyuhan => [ 4.28, 187, -3.77743648 ],
+	      johnnybameesh => [ 4.42, 156, -3.56405011 ],
+	      bhbakerblazarus => [ 3.57, 147, -3.71897877 ],
+	      cjosephpavpan => [ 4.90, 1100, -5.41319732 ],
+	      chiraagpraynaa => [ 4.14, 198, -3.86798530 ],
+	      rterbush => [ 4.05, 223, -4.00741673 ],
+	      alanhozek => [ 3.84, 142, -3.61100533 ],
+	      omidacostan => [ 2.87, 145, -3.92121608 ],
+	      franklikxing => [ 4.18, 216, -3.94381814 ],
+	      czhaoheyitsye => [ 3.90, 154, -3.67514482 ],
+	      shalevbelinkov => [ 4.71, 196, -3.72751143 ],
+	      shalevbelinkov2 => [ 4.71, 196, -3.72751143 ] };
+
+my $lozenge = <<'END';
+  <defs
+      id="mydefs226">
+    <marker
+        refX="0"
+        refY="0"
+        orient="auto"
+        id="Arrow1Lend"
+        style="overflow:visible">
+      <path
+          d="M 0,0 5,-5 -12.5,0 5,5 0,0 z"
+          transform="matrix(-0.8,0,0,-0.8,-10,0)"
+          id="path36174"
+          style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt" />
+    </marker>
+  </defs>
+
+  <g
+      transform="translate(22.613306,423.82335)"
+      id="g3451">
+    <path
+        d="m 347.93938,61.902275 a 50.289993,31.040236 0 1 1 -100.57999,0 50.289993,31.040236 0 1 1 100.57999,0 z"
+        transform="matrix(0.81139419,-0.58449935,0.58449935,0.81139419,10.043374,210.55449)"
+        id="path36637"
+        style="fill:#ffd7ff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-opacity:1;display:inline" />
+    <path
+        d="m 304.36043,72.312615 15.50374,-12.67902"
+        id="path36165"
+        style="fill:none;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#Arrow1Lend);display:inline" />
+    <text
+        x="124.90462"
+        y="256.27182"
+        transform="matrix(0.76379002,-0.6454648,0.6454648,0.76379002,0,0)"
+        id="text270-5"
+        style="font-size:18px;text-anchor:start;color:#000000;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Arial">
+      <tspan
+          id="tspan36635"
+          style="font-style:italic;font-weight:bold;-inkscape-font-specification:Arial Bold Italic">Better</tspan>
+    </text>
+  </g>
+END
+
+sub makeframe {
+  my ( $interp, $frameno ) = @_;
+
+  open GNUPLOT, q{| gnuplot} or die;
+  print GNUPLOT <<END;
+set ylabel "Throughput"
+set xlabel "Delay"
+set xrange [596:138]
+set yrange [0.2:3.5]
+set logscale x
+set terminal svg size 1024,768 dashed
+set output "/tmp/data.svg"
+unset key
+END
+
+  my @xtics = (138, 256, 512);
+  my @ytics = (0.5, 1, 1.5, 2, 2.5, 3, 3.5);
+  print GNUPLOT q{set xtics (};
+
+  my @xticstr;
+
+  for ( @xtics ) {
+    push @xticstr, sprintf qq{"%.0f" %f}, (1 - $interp) * ($_ * 69 / 51) + $interp * $_, $_;
+  }
+
+  print GNUPLOT join ", ", @xticstr;
+  print GNUPLOT qq{)\n};
+
+  print GNUPLOT q{set ytics (};
+
+  my @yticstr;
+
+  for ( @ytics ) {
+    push @yticstr, sprintf qq{"%.1f" %f}, (1 - $interp) * ($_ * 3.41 / 5.07) + $interp * $_, $_;
+  }
+
+  print GNUPLOT join ", ", @yticstr;
+  print GNUPLOT qq{)\n};
+
+
+  printf GNUPLOT qq{set title "Training to testing (%.0f%%)"\n}, $interp * 100;
+
+  my $num = 1;
+  my $num_shalev = 0;
+  for ( sort keys $test ) {
+    my $name = $_;
+    my $throughput = (1 - $interp) * ($train->{ $_ }[ 0 ] * 3.41 / 5.07) + $interp * $test->{ $_ }[ 0 ];
+    my $delay = (1 - $interp) * ($train->{ $_ }[ 1 ] * 69 / 51) + $interp * $test->{ $_ }[ 1 ];
+    my $voffset = 0;
+    $voffset = 0.5 if $name =~ m{ameesh};
+
+    if ( $name eq "shalevbelinkov" ) {
+      $num_shalev = $num;
+    } elsif ( $name eq "shalevbelinkov2" ) {
+      $num = $num_shalev;
+      $name = "shalevbelinkov";
+    }
+
+    print GNUPLOT qq{set label "$name" at $delay,$throughput right textcolor ls $num point lc $num pt $num offset -1.5,$voffset\n};
+    $num++;
+  }
+
+  print GNUPLOT qq{plot "-" with lines lt 3\n};
+  for ( qw[sprout sprout15 sprout25] ) {
+    my $throughput = (1 - $interp) * ($train->{ $_ }[ 0 ] * 3.41 / 5.07) + $interp * $test->{ $_ }[ 0 ];
+    my $delay = (1 - $interp) * ($train->{ $_ }[ 1 ] * 69 / 51) + $interp * $test->{ $_ }[ 1 ];
+
+    print GNUPLOT qq{$delay $throughput\n};
+  }
+
+  close GNUPLOT or die;
+
+  open SVG, '/tmp/data.svg' or die;
+  my @lines = <SVG>;
+  close SVG or die;
+
+  for ( @lines ) { s{font-family:Arial;}{font-weight:bold;-inkscape-font-specification:Arial Bold;}g  }
+
+  $lines[ -1 ] = $lines[ -2 ];
+  $lines[ -2 ] = $lozenge;
+  open SVG, '>/tmp/data.svg' or die;
+  print SVG @lines;
+  close SVG or die;
+
+  system( qq{inkscape /tmp/data.svg --export-png=frames/out${frameno}.png -y 255} );
+}
+
+my $num = 0;
+
+for ( 1 .. 60 ) { makeframe( 0, $num++ ) }
+for ( 0 .. 512 ) { makeframe( .5 * (1 - cos( 3.14159265 * $_ / 512 )), $num++ ) }
+for ( 1 .. 60 ) { makeframe( 1, $num++ ) }
