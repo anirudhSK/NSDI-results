@@ -4,8 +4,8 @@ use strict;
 
 my $test = { johnnybameesh => [ 2.53, 161.00, -4.15 ],
 	     sprout => [ 2.03, 139.00, -4.22 ],
-	     sprout15 => [ 2.73, 202, -4.30 ],
-	     sprout25 => [ 2.98, 285, -4.56 ],
+#	     sprout15 => [ 2.73, 202, -4.30 ],
+#	     sprout25 => [ 2.98, 285, -4.56 ],
 	     dasjoshma => [ 2.52, 174.00, -4.23 ],
 	     franklikxing => [ 2.32, 184.00, -4.37 ],
 	     alanhozek => [ 1.98, 162.00, -4.40 ],
@@ -33,8 +33,8 @@ my $train = { dasjoshma => [ 4.29, 158, -3.60681122 ],
 	      hyuengelash => [ 3.65, 164, -3.80621311 ],
 	      mattocksbadar => [ 1.49, 134, -4.50173906 ],
 	      sprout => [ 3.54, 129, -3.59698478 ],
-	      sprout15 => [ 4.37, 174, -3.68437125 ],
-	      sprout25 => [ 4.98, 205, -3.79705797 ],
+#	      sprout15 => [ 4.37, 174, -3.68437125 ],
+#	      sprout25 => [ 4.98, 205, -3.79705797 ],
 #	      sprout50 => [ 4.79, 274, -4.04614319 ],
 	      lalpertpquimby => [ 3.34, 175, -3.95814938 ],
 	      jsterlinleonidg => [ 4.98, 319, -4.38 ],
@@ -100,45 +100,20 @@ sub makeframe {
 
   open GNUPLOT, q{| gnuplot} or die;
   print GNUPLOT <<END;
-set ylabel "Throughput (Mbps)"
+set ylabel "Utilization (fraction)"
 set xlabel "Delay (ms)"
-set xrange [1600:128]
-set yrange [0.17:3.5]
+set xrange [700:100]
+set yrange [0.0:1.0]
 set logscale x
 set terminal svg size 1280,720 dashed
 set output "/tmp/data.svg"
 unset key
 END
 
-  my @xtics = (128, 256, 512, 1024);
-  my @ytics = (0.5, 1, 1.5, 2, 2.5, 3, 3.5);
-  print GNUPLOT q{set xtics (};
-
-  my @xticstr;
-
-  for ( @xtics ) {
-    push @xticstr, sprintf qq{"%.0f" %f}, (1 - $interp) * ($_ * 51 / 69) + $interp * $_, $_;
-  }
-
-  print GNUPLOT join ", ", @xticstr;
-  print GNUPLOT qq{)\n};
-
-  print GNUPLOT q{set ytics (};
-
-  my @yticstr;
-
-  for ( @ytics ) {
-    push @yticstr, sprintf qq{"%.1f" %f}, (1 - $interp) * ($_ * 5.07 / 3.41) + $interp * $_, $_;
-  }
-
-  print GNUPLOT join ", ", @yticstr;
-  print GNUPLOT qq{)\n};
-
-
   if ( $interp == 0 ) {
     printf GNUPLOT qq{set title "Performance on training data (Verizon LTE, September, 2012)"\n};
   } elsif ( $interp == 1 ) {
-    printf GNUPLOT qq{set title "Performance on training data (Verizon LTE, March 2013)"\n};
+    printf GNUPLOT qq{set title "Performance on testing data (Verizon LTE, March 2013)"\n};
   } else {
     printf GNUPLOT qq{set title "Performance on training (%.0f%%) => testing (%.0f%%) data"\n}, (1 - $interp) * 100, $interp * 100;
   }
@@ -158,8 +133,15 @@ sub myfunc {
   my $num_shalev = 0;
   for ( sort { myfunc( $a, $b ) } keys $test ) {
     my $name = $_;
-    my $throughput = (1 - $interp) * ($train->{ $_ }[ 0 ] * 3.41 / 5.07) + $interp * $test->{ $_ }[ 0 ];
-    my $delay = (1 - $interp) * ($train->{ $_ }[ 1 ] * 69 / 51) + $interp * $test->{ $_ }[ 1 ];
+    my $throughput = 0;
+    if ( $interp ==  0 ) {
+      $throughput = ($train->{ $_ }[ 0 ]) / 5.074;
+    } else {
+      $throughput = ($test->{ $_ }[ 0 ]) / 3.394;
+    }
+
+    my $delay = (1 - $interp) * ($train->{ $_ }[ 1 ]) + $interp * $test->{ $_ }[ 1 ];
+
     my $voffset = 0;
     $voffset = 0.5 if $name =~ m{ameesh};
     $voffset = 0.5 if $name =~ m{sprout25};
@@ -173,18 +155,15 @@ sub myfunc {
     }
 
     my $direction = "right";
-
-    print GNUPLOT qq{set label "$name" at $delay,$throughput $direction textcolor ls $num point lc $num pt $num offset -1.5,$voffset\n};
+    if ($name eq "sprout") {
+      print GNUPLOT qq{set label "$name" at $delay,$throughput $direction font "Symbol, 12" textcolor ls $num point lc $num ps 2 pt $num offset -1.5,$voffset\n};
+    } else {
+      print GNUPLOT qq{set label "$num" at $delay,$throughput $direction font "Symbol, 12" textcolor ls $num point lc $num ps 2 pt $num offset -1.5,$voffset\n};
+    }
     $num++;
   }
 
   print GNUPLOT qq{plot "-" with lines lt 3\n};
-  for ( qw[sprout sprout15 sprout25] ) {
-    my $throughput = (1 - $interp) * ($train->{ $_ }[ 0 ] * 3.41 / 5.07) + $interp * $test->{ $_ }[ 0 ];
-    my $delay = (1 - $interp) * ($train->{ $_ }[ 1 ] * 69 / 51) + $interp * $test->{ $_ }[ 1 ];
-
-    print GNUPLOT qq{$delay $throughput\n};
-  }
 
   close GNUPLOT or die;
 
@@ -200,12 +179,10 @@ sub myfunc {
   print SVG @lines;
   close SVG or die;
 
-  system( qq{inkscape /tmp/data.svg --export-png=frames/out${frameno}.png -y 255} );
-  system( qq{convert -negate frames/out${frameno}.png frames/out-invert${frameno}.png} );
+  system( qq{inkscape /tmp/data.svg --export-pdf=frames/out${frameno}.pdf -y 255} );
 }
 
 my $num = 0;
 
-for ( 1 .. 100 ) { makeframe( 0, $num++ ) }
-for ( 0 .. 512 ) { makeframe( .5 * (1 - cos( 3.14159265 * $_ / 512 )), $num++ ) }
-for ( 1 .. 100 ) { makeframe( 1, $num++ ) }
+for ( 1 .. 1 ) { makeframe( 0, $num++ ) }
+for ( 1 .. 1 ) { makeframe( 1, $num++ ) }
