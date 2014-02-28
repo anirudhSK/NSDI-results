@@ -111,7 +111,7 @@ unset key
 END
 
   if ( $interp == 0 ) {
-    printf GNUPLOT qq{set title "Performance on training data (Verizon LTE, September, 2012)"\n};
+    printf GNUPLOT qq{set title "Performance on training data (Verizon LTE, September 2012)"\n};
   } elsif ( $interp == 1 ) {
     printf GNUPLOT qq{set title "Performance on testing data (Verizon LTE, March 2013)"\n};
   } else {
