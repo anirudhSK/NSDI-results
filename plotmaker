@@ -24,8 +24,7 @@ my $test = { johnnybameesh => [ 2.53, 161.00, -4.15 ],
 	     jsterlinleonidg => [ 2.72, 595.00, -5.39 ],
 	     cjosephpavpan => [ 3.29, 1193.00, -5.89 ],
 	     thashimpareshmg => [ 0.24, 150.00, -6.43 ],
-	     shalevbelinkov => [ 3.07, 7957.00, -7.86 ],
-	     'revised-shalevbelinkov' => [ 2.98, 221, -4.30 ] };
+	     shalevbelinkov => [ 3.07, 7957.00, -7.86 ] };
 
 my $train = { dasjoshma => [ 4.29, 158, -3.60681122 ],
 	      aganeberzak => [ 4.52, 167, -3.61033885 ],
@@ -50,8 +49,7 @@ my $train = { dasjoshma => [ 4.29, 158, -3.60681122 ],
 	      omidacostan => [ 2.87, 145, -3.92121608 ],
 	      franklikxing => [ 4.18, 216, -3.94381814 ],
 	      czhaoheyitsye => [ 3.90, 154, -3.67514482 ],
-	      shalevbelinkov => [ 4.71, 196, -3.72751143 ],
-	      'revised-shalevbelinkov' => [ 4.71, 196, -3.72751143 ] };
+	      shalevbelinkov => [ 4.71, 196, -3.72751143 ] };
 
 my $lozenge = <<'END';
   <defs
@@ -102,7 +100,8 @@ sub makeframe {
   print GNUPLOT <<END;
 set ylabel "Utilization (fraction)"
 set xlabel "Delay (ms)"
-set xrange [700:100]
+set xrange [8100:100]
+set xtics (100.        ,   162.72506099,   264.79445475,   430.88693801, 701.16103268,  1140.9647181 ,  1856.63553345,  3021.21130423, 4916.26793756,  8000.)
 set yrange [0.0:1.0]
 set logscale x
 set terminal svg size 1280,720 dashed
@@ -155,7 +154,7 @@ sub myfunc {
     }
 
     my $direction = "right";
-    if ($name eq "sprout") {
+    if (($name eq "sprout") || ($name eq "johnnybameesh") || ($name eq "dasjoshma") ) {
       print GNUPLOT qq{set label "$name" at $delay,$throughput $direction font "Symbol, 12" textcolor ls $num point lc $num ps 2 pt $num offset -1.5,$voffset\n};
     } else {
       print GNUPLOT qq{set label "$num" at $delay,$throughput $direction font "Symbol, 12" textcolor ls $num point lc $num ps 2 pt $num offset -1.5,$voffset\n};
