@@ -130,7 +130,7 @@ sub myfunc {
 
   my $num = 1;
   my $num_shalev = 0;
-  for ( sort { myfunc( $a, $b ) } keys $test ) {
+  for ( keys $test ) {
     my $name = $_;
     my $throughput = 0;
     if ( $interp ==  0 ) {
@@ -153,11 +153,11 @@ sub myfunc {
 #      $name = "shalevbelinkov";
     }
 
-    my $direction = "right";
+    my $direction = "left";
     if (($name eq "sprout") || ($name eq "johnnybameesh") || ($name eq "dasjoshma") ) {
-      print GNUPLOT qq{set label "$name" at $delay,$throughput $direction font "Symbol, 12" textcolor ls $num point lc $num ps 2 pt $num offset -1.5,$voffset\n};
+      print GNUPLOT qq{set label "$name" at $delay,$throughput $direction font "Symbol, 12" textcolor ls $num point lc $num ps 2 pt $num offset +1.5,$voffset\n};
     } else {
-      print GNUPLOT qq{set label "$num" at $delay,$throughput $direction font "Symbol, 12" textcolor ls $num point lc $num ps 2 pt $num offset -1.5,$voffset\n};
+      print GNUPLOT qq{set label "$num" at $delay,$throughput $direction font "Symbol, 12" textcolor ls $num point lc $num ps 2 pt $num offset +1.5,$voffset\n};
     }
     $num++;
   }
