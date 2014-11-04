@@ -99,9 +99,9 @@ sub makeframe {
   open GNUPLOT, q{| gnuplot} or die;
   print GNUPLOT <<END;
 set ylabel "Utilization (fraction)"
-set xlabel "Delay (ms)"
+set xlabel "95% end-to-end delay (ms)"
 set xrange [8100:100]
-set xtics (100.        ,   162.72506099,   264.79445475,   430.88693801, 701.16103268,  1140.9647181 ,  1856.63553345,  3021.21130423, 4916.26793756,  8000.)
+set xtics (100.        ,   162,   264,   430, 701,  1140,  1856,  3021, 4916,  8000.)
 set yrange [0.0:1.0]
 set logscale x
 set terminal svg size 1280,720 dashed
@@ -110,9 +110,9 @@ unset key
 END
 
   if ( $interp == 0 ) {
-    printf GNUPLOT qq{set title "Performance on training data (Verizon LTE, September 2012)"\n};
+    printf GNUPLOT qq{set title "Performance on training trace (Verizon LTE, September 2012)"\n};
   } elsif ( $interp == 1 ) {
-    printf GNUPLOT qq{set title "Performance on testing data (Verizon LTE, March 2013)"\n};
+    printf GNUPLOT qq{set title "Performance on testing trace (Verizon LTE, March 2013)"\n};
   } else {
     printf GNUPLOT qq{set title "Performance on training (%.0f%%) => testing (%.0f%%) data"\n}, (1 - $interp) * 100, $interp * 100;
   }
@@ -153,7 +153,7 @@ sub myfunc {
 #      $name = "shalevbelinkov";
     }
 
-    my $direction = "left";
+    my $direction = "right";
     if (($name eq "sprout") || ($name eq "johnnybameesh") || ($name eq "dasjoshma") ) {
       print GNUPLOT qq{set label "$name" at $delay,$throughput $direction font "Symbol, 12" textcolor ls $num point lc $num ps 2 pt $num offset +1.5,$voffset\n};
     } else {
